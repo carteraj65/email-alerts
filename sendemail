@@ -1,0 +1,16 @@
+$User = "netadmin@hawkedon.wokingham.sch.uk"
+$File = "C:\users\netadmin\EmailPassword.txt"
+$cred=New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, (Get-Content $File | ConvertTo-SecureString)
+$EmailTo = "netadmin@hawkedon.wokingham.sch.uk"
+$EmailFrom = "netadmin@hawkedon.wokingham.sch.uk"
+$Subject = "VPN alert" 
+$Body = "check the vpn log on server-3" 
+$SMTPServer = "smtp.office365.com" 
+#$filenameAndPath = "C:\user\netadmin\fileIwantToSend.csv"
+$SMTPMessage = New-Object System.Net.Mail.MailMessage($EmailFrom,$EmailTo,$Subject,$Body)
+#$attachment = New-Object System.Net.Mail.Attachment($filenameAndPath)
+#$SMTPMessage.Attachments.Add($attachment)
+$SMTPClient = New-Object Net.Mail.SmtpClient($SmtpServer, 587) 
+$SMTPClient.EnableSsl = $true 
+$SMTPClient.Credentials = New-Object System.Net.NetworkCredential($cred.UserName, $cred.Password); 
+$SMTPClient.Send($SMTPMessage)
